@@ -15,8 +15,20 @@ app.get('/', (req, res) => {
     res.render("home.ejs")
 });
 
+app.get('/home', (req, res) => {
+    res.render("home.ejs")
+});
+
+app.get('/schedule', (req, res) => {
+    res.render("schedule.ejs")
+});
+
 app.get('/contest', (req, res) => {
     res.render("contest.ejs")
+});
+
+app.get('/resources', (req, res) => {
+    res.render("resources.ejs")
 });
 
 let ctts = {}; //contestants;
