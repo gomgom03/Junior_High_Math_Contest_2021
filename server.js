@@ -31,7 +31,17 @@ fs.readFile("./contestants.txt", "utf-8", (err, data) => {
     //email, fName, lName, parentPerm, ms, hs, excited, 
     for (let i = 0; i < formattedData.length; i++) {
         let curStudent = formattedData[i];
-        let tEmail = curStudent[0].toLowerCase()
+        let tEmail = curStudent[0].toLowerCase();
+        ctir[tEmail.toLowerCase()] = {
+            wsList: [],
+            answers: [],
+            acceptResponses: false,
+            endTime: null,
+            ctn: null
+        };
+        for (let i = 0; i < contests.length; i++) {
+            ctir[tEmail].answers.push([]);
+        }
         ctts[tEmail] = {
             fName: curStudent[1],
             lName: curStudent[2],
@@ -137,9 +147,9 @@ function loginHandle(message, ws) {
     if (temp != null && temp.pw === pw) {
         ctis[email.toLowerCase()] = ws;
         ctgs[cttgl[email.toLowerCase()]].wsList.push(ws);
-
+        ctir[email.toLowerCase()].wsList.push(ws);
         ws.send(JSON.stringify({ id: "loginResponse", msg: Object.assign({ ...temp }, { verify: true, tests: JSON.stringify(testNames) }) }));
-        ctgs[cttgl[email.toLowerCase()]].acceptResponses ? userRequestStartHandle(temp, ws, true) : null;
+        ctgs[cttgl[email.toLowerCase()]].acceptResponses || ctir[email.toLowerCase()].acceptResponses ? userRequestStartHandle(temp, ws, true) : null;
     } else {
         ws.send(JSON.stringify({ id: "loginResponse", msg: { verify: false } }));
     }
@@ -163,8 +173,9 @@ function userRequestStartHandle(message, ws, ind = false) {
     //find group and initiate start if time is right and email is right
     let temp = ctts[email.toLowerCase()];
     console.log(temp);
-    if (temp != null && pin === pin) {
-        if (isIndividual[testNum]) {
+    if (temp != null && pin === temp.pin) {
+        if (isIndividual[testNum] || isIndividual[ctir[email.toLowerCase()].ctn]) {
+            console.log("THIS WAS CALLEDind", ctir[email.toLowerCase()].acceptResponses);
 
 
 
@@ -173,19 +184,19 @@ function userRequestStartHandle(message, ws, ind = false) {
 
 
 
-
-            if (!ctgs[cttgl[email.toLowerCase()]].acceptResponses) {
+            if (!ctir[email.toLowerCase()].acceptResponses) {
                 if (testNum == null) {
+                    console.log("THIS WAS CALLED");
                     ws.send(JSON.stringify({ id: "userRequestStartResponse", msg: { verify: false } }));
                     return;
                 }
-                ctgs[cttgl[email.toLowerCase()]].acceptResponses = true;
-                ctgs[cttgl[email.toLowerCase()]].ctn = testNum
+                ctir[email.toLowerCase()].acceptResponses = true;
+                ctir[email.toLowerCase()].ctn = testNum
                 let curTestTime = testTimes[testNum];
-                ctgs[cttgl[email.toLowerCase()]].endTime = Date.now() + curTestTime * 60 * 1000;
+                ctir[email.toLowerCase()].endTime = Date.now() + curTestTime * 60 * 1000;
                 setTimeout(() => {
-                    console.log(ctgs[cttgl[email.toLowerCase()]])
-                    ctgs[cttgl[email.toLowerCase()]].wsList.forEach(x => {
+                    console.log(ctir[email.toLowerCase()])
+                    ctir[email.toLowerCase()].wsList.forEach(x => {
                         if (x.readyState === WebSocket.OPEN) {
                             x.send(JSON.stringify({
                                 id: "testEnd",
@@ -196,10 +207,11 @@ function userRequestStartHandle(message, ws, ind = false) {
                             }))
                         }
                     })
-                    ctgs[cttgl[email.toLowerCase()]].acceptResponses = false;
+                    ctir[email.toLowerCase()].acceptResponses = false;
                 }, curTestTime * 60 * 1000)
             }
-            let curTeam = ctgs[cttgl[email.toLowerCase()]];
+            ////////START HERE
+            let curTeam = ctir[email.toLowerCase()];
             if (ind) {
                 let curSocket = ctis[email.toLowerCase()];
                 if (curSocket.readyState === WebSocket.OPEN) {
@@ -207,9 +219,9 @@ function userRequestStartHandle(message, ws, ind = false) {
                         id: "userRequestStartResponse",
                         msg: {
                             verify: true,
-                            test: contests[ctgs[cttgl[email.toLowerCase()]].ctn],
-                            answers: curTeam.answers[ctgs[cttgl[email.toLowerCase()]].ctn],
-                            endTime: ctgs[cttgl[email.toLowerCase()]].endTime
+                            test: contests[ctir[email.toLowerCase()].ctn],
+                            answers: curTeam.answers[ctir[email.toLowerCase()].ctn],
+                            endTime: ctir[email.toLowerCase()].endTime
                         }
                     }))
                 }
@@ -221,8 +233,8 @@ function userRequestStartHandle(message, ws, ind = false) {
                             id: "userRequestStartResponse",
                             msg: {
                                 verify: true,
-                                test: contests[ctgs[cttgl[email.toLowerCase()]].ctn],
-                                endTime: ctgs[cttgl[email.toLowerCase()]].endTime
+                                test: contests[ctir[email.toLowerCase()].ctn],
+                                endTime: ctir[email.toLowerCase()].endTime
                             }
                         }))
                     }
@@ -259,7 +271,7 @@ function userRequestStartHandle(message, ws, ind = false) {
                 let curTestTime = testTimes[testNum];
                 ctgs[cttgl[email.toLowerCase()]].endTime = Date.now() + curTestTime * 60 * 1000;
                 setTimeout(() => {
-                    console.log(ctgs[cttgl[email.toLowerCase()]])
+                    console.log(ctgs[cttgl[email.toLowerCase()]], ctir);
                     ctgs[cttgl[email.toLowerCase()]].wsList.forEach(x => {
                         if (x.readyState === WebSocket.OPEN) {
                             x.send(JSON.stringify({
@@ -318,12 +330,41 @@ function userQuestionSubmitHandle(message, ws) {
         ws.send(JSON.stringify({ id: "userQuestionSubmitResponse", msg: { verify: false } }));
         return;
     }
+    console.log(ctir);
     //find group and initiate start if time is right and email is right
     let temp = ctts[email.toLowerCase()];
-    console.log(temp);
+    console.log(temp, pin);
     if (temp != null && temp.pin === pin) {
 
-        if (isIndividual[testNum]) {
+        if (isIndividual[ctir[email.toLowerCase()].ctn]) {
+
+
+
+
+            let curTeam = ctir[email.toLowerCase()];
+            if (curTeam.acceptResponses == true) {
+                curTeam.answers[testNum][qNum] = qData;
+                curTeam.wsList.forEach(x => {
+                    if (x.readyState === WebSocket.OPEN) {
+                        x.send(JSON.stringify({
+                            id: "userQuestionSubmitResponse",
+                            msg: {
+                                verify: true,
+                                qData: curTeam.answers[testNum]
+                            }
+                        }))
+                    }
+                })
+                console.log(ctgs);
+                return;
+            } else {
+                ws.send(JSON.stringify({ id: "userQuestionSubmitResponse", msg: { verify: false } }));
+                return;
+            }
+
+
+
+
 
         } else {
             let curTeam = ctgs[cttgl[email.toLowerCase()]];

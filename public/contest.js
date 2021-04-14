@@ -365,7 +365,8 @@ function generateRound(questions, answers = null) {
             if (curVal != "") {
                 userQuestionSubmit(i, curVal);
             }
-        })
+        });
+        questionElems.push(tDiv);
     }
 
     tContainer.appendChild(tQLDiv);
