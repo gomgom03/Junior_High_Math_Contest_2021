@@ -156,6 +156,7 @@ function loginHandle(message, ws) {
         ws.send(JSON.stringify({ id: "loginResponse", msg: { verify: false } }));
     }
     let temp = ctts[email.toLowerCase()];
+    console.log(temp);
     if (temp != null && temp.pw === pw) {
         ctis[email.toLowerCase()] = ws;
         ctgs[cttgl[email.toLowerCase()]].wsList.push(ws);
