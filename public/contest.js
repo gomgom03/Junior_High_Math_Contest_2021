@@ -1,7 +1,7 @@
 let ws;
 async function connect() {
-    //const loc = "ws://localhost:3000/"
-    const loc = "ws://jrhighmath2021.azurewebsites.net/contest";
+    const loc = "ws://localhost:3000/"
+    //const loc = "ws://jrhighmath2021.azurewebsites.net/contest";
     function init() {
         if (ws) {
             ws.onerror = ws.onopen = ws.onclose = null;
@@ -55,7 +55,8 @@ connect().then(() => {
 })
 */
 let curTestNum = 0;
-const section_container = document.getElementById("section_container")
+const section_container = document.getElementById("section_container"),
+    jhmctext = document.getElementById("jhmctext");
 
 function wsSend(obj) {
     ws ? ws.send(JSON.stringify(obj)) : alert("Websocket not connected. Try refreshing your page.");
@@ -100,7 +101,22 @@ function userQuestionSubmit(qNum, qData) {
     })
 }
 
-
+function startTimer(endTime) {
+    let et = parseInt(endTime);
+    let tInterval = setInterval(() => {
+        let dn = Date.now();
+        if (et >= dn) {
+            let cTime = Math.floor((et - dn) / 1000);
+            let min = Math.floor(cTime / 60).toString();
+            let sec = (cTime % 60).toString();
+            let str = `${min}:${sec.length == 1 ? "0" + sec : sec}`;
+            jhmctext.textContent = str;
+            return;
+        }
+        jhmctext.textContent = "Junior High Math Contest 2021";
+        clearInterval(tInterval);
+    }, 1000);
+}
 
 function loginResponseHandle(data) {
     if (data.verify) {
@@ -121,6 +137,7 @@ function userRequestStartResponseHandle(data) {
         let curTest = data.test;
         generateRound(curTest, data.answers);
         alert("Contest Started!");
+        startTimer(data.endTime);
         console.log(curTest);
     } else {
         alert("User Request Start Denied.")
@@ -371,6 +388,15 @@ function generateRound(questions, answers = null) {
     }
 
     tContainer.appendChild(tQLDiv);
-
+    /*
+    let tSAButton = document.createElement("button");
+    tSAButton.textContent = "Submit All";
+    tContainer.appendChild(tSAButton);
+    tSAButton.addEventListener("click", ()=>{
+        wsSend({
+            id:
+        })
+    })
+    */
     section_container.appendChild(tSection);
 }

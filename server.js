@@ -205,7 +205,8 @@ function userRequestStartHandle(message, ws, ind = false) {
                 ctir[email.toLowerCase()].acceptResponses = true;
                 ctir[email.toLowerCase()].ctn = testNum
                 let curTestTime = testTimes[testNum];
-                ctir[email.toLowerCase()].endTime = Date.now() + curTestTime * 60 * 1000;
+                let tEndTime = Date.now() + curTestTime * 60 * 1000;
+                ctir[email.toLowerCase()].endTime = tEndTime;
                 setTimeout(() => {
                     console.log(ctir[email.toLowerCase()])
                     ctir[email.toLowerCase()].wsList.forEach(x => {
@@ -281,7 +282,8 @@ function userRequestStartHandle(message, ws, ind = false) {
                 ctgs[cttgl[email.toLowerCase()]].acceptResponses = true;
                 ctgs[cttgl[email.toLowerCase()]].ctn = testNum
                 let curTestTime = testTimes[testNum];
-                ctgs[cttgl[email.toLowerCase()]].endTime = Date.now() + curTestTime * 60 * 1000;
+                let tEndTime = Date.now() + curTestTime * 60 * 1000
+                ctgs[cttgl[email.toLowerCase()]].endTime = tEndTime;
                 setTimeout(() => {
                     console.log(ctgs[cttgl[email.toLowerCase()]], ctir);
                     ctgs[cttgl[email.toLowerCase()]].wsList.forEach(x => {
