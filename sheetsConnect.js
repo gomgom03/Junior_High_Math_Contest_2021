@@ -25,11 +25,11 @@ module.exports = () => {
     async function gsrun(cl) {
         const gsapi = google.sheets({ version: "v4", auth: cl });
         const opt = {
-            spreadsheetId: '1-Ng4zfNfrvK3U-n2HcX2rfZ17hWwmNUso18cwQPhT80',
-            range: 'Sheet1!A1:K13'
+            spreadsheetId: '1jFhyW3Mh1TGsw0sUuraNGCHTiOGuuu75R5yfXjbJBH0',
+            range: 'Individual!A1:K13'
         }
         recentData = await gsapi.spreadsheets.values.get(opt);
-
+        console.log(recentData.data.values);
     }
 
     function retrieveData() {
