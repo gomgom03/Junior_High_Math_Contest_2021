@@ -64,7 +64,7 @@ fs.readFile("./contestants.txt", "utf-8", (err, data) => {
             pin: parseInt(Math.random() * Math.pow(10, Math.random() * 3 + 3)).toString(16),
             pw: Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5)
         }
-        tEmail === "wang.jenna129@gmail.com" || tEmail === "wonseoks2220@northbrook28.net" | tEmail === "zbenisvy@student.district31.net" ? console.log([tEmail, ctts[tEmail].pw]) : null;
+        tEmail === "zlljp266022@d40.hf" || tEmail === "wonseoks2220@northbrook28.net" | tEmail === "zbenisvy@student.district31.net" ? console.log([tEmail, ctts[tEmail].pw]) : null;
 
     }
     console.log(ctts);
@@ -408,3 +408,38 @@ function userQuestionSubmitHandle(message, ws) {
         return;
     }
 }
+
+
+
+
+const sheetsObj = require("./sheetsConnect.js");
+console.log(sheetsObj);
+let writer = new sheetsObj();
+//console.log(writer);
+writer.run();
+//a.writeData("Individual", "A1", [["hello"]]);
+
+function updateSpreadSheet() {
+    let wt = [];
+    for (key in ctgs) {
+        let arr = [key];
+        let cur = ctgs[key];
+        arr = arr.concat(cur.answers[1]);
+        wt.push(arr);
+    }
+    //console.log(wt);
+    writer.writeData("Team", "A1", wt);
+    wt = [];
+    for (key in ctir) {
+        let arr = [ctts[key].fName + " " + ctts[key].lName];
+        let cur = ctir[key];
+        arr = arr.concat(cur.answers[0]);
+        wt.push(arr);
+    }
+    writer.writeData("Individual", "A1", wt);
+    // console.log(wt);
+    // console.log(Object.keys(ctgs));
+    // console.log(Object.keys(ctir));
+}
+
+setInterval(updateSpreadSheet, 60000);
