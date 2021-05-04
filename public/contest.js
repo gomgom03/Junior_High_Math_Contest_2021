@@ -165,7 +165,7 @@ function userQuestionSubmitResponseHandle(data) {
 function testEndHandle(data) {
     let { verify, testNum } = data;
     if (verify) {
-        alert(`Round ${testNum} ended!`)
+        alert(`Round ${testNum + 1} ended!`)
     }
     generateTestOptions();
 }
@@ -249,7 +249,7 @@ function generateLogin() {
     tHeadingTitle.classList = "text-info";
     tHeadingTitle.textContent = "Login";
     let tHeadingParagraph = document.createElement("p");
-    tHeadingParagraph.textContent = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quam urna, dignissim nec auctor in, mattis vitae leo."
+    tHeadingParagraph.textContent = "Welcome!"
     tHeading.appendChild(tHeadingTitle);
     tHeading.appendChild(tHeadingParagraph);
     tContainer.appendChild(tHeading);
@@ -302,6 +302,7 @@ function generateLogin() {
 }
 
 function generateRound(questions, answers = null) {
+    console.log(questions);
     while (section_container.hasChildNodes()) {
         section_container.removeChild(section_container.firstChild);
     }
@@ -318,9 +319,10 @@ function generateRound(questions, answers = null) {
     tHeading.classList = "block-heading";
     let tHeadingTitle = document.createElement("h2");
     tHeadingTitle.classList = "text-info";
-    tHeadingTitle.textContent = "Team Round";
+    let isInd = questions[0].charAt(0) != "C";
+    tHeadingTitle.textContent = isInd ? "Individual Round" : "Team Round";
     let tHeadingParagraph = document.createElement("p");
-    tHeadingParagraph.textContent = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quam urna, dignissim nec auctor in, mattis vitae leo."
+    tHeadingParagraph.textContent = isInd ? "No calculator." : "Calulators are permitted";
     tHeading.appendChild(tHeadingTitle);
     tHeading.appendChild(tHeadingParagraph);
     tContainer.appendChild(tHeading);
@@ -338,10 +340,11 @@ function generateRound(questions, answers = null) {
         questionFieldDiv.classList = "col";
         let bubbleDiv = document.createElement("div");
         let tQuestion = document.createElement("p");
-        tQuestion.textContent = questions[i];
+        tQuestion.innerHTML = questions[i];
+        MathJax.Hub.Queue(['Typeset', MathJax.Hub, tQuestion]);
         bubbleDiv.appendChild(tQuestion);
         let rowDiv = document.createElement("div");
-        rowDiv.classList = "row";
+        rowDiv.classList = "row pb-4 mb-4 pt-4";
         let questionField = document.createElement("div");
         questionField.classList = "col col-8";
         let questionFieldRow = document.createElement("div");
@@ -356,7 +359,7 @@ function generateRound(questions, answers = null) {
         let buttonCol = document.createElement("div");
         buttonCol.classList = "col";
         let tButton = document.createElement("button");
-        tButton.classList = "btn btn-primary";
+        tButton.classList = "btn btn-outline-primary";
         tButton.type = "button";
         tButton.textContent = "Submit"
         buttonElems.push(tButton);

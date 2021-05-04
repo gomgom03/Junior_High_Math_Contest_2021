@@ -30,6 +30,13 @@ app.get('/contest', (req, res) => {
 app.get('/resources', (req, res) => {
     res.render("resources.ejs")
 });
+app.get('/admin', (req, res) => {
+    res.render("admin.ejs");
+})
+
+// app.get('/mj', (req, res) => {
+//     res.render("mjtest.ejs")
+// });
 
 let ctts = {}; //contestants;
 let ctgs = {}; //contestgroups;
@@ -64,10 +71,10 @@ fs.readFile("./contestants.txt", "utf-8", (err, data) => {
             pin: parseInt(Math.random() * Math.pow(10, Math.random() * 3 + 3)).toString(16),
             pw: Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5)
         }
-        tEmail === "zlljp266022@d40.hf" || tEmail === "wonseoks2220@northbrook28.net" | tEmail === "zbenisvy@student.district31.net" ? console.log([tEmail, ctts[tEmail].pw]) : null;
+        setTimeout(() => { console.log(tEmail + "\t" + ctts[tEmail].pw + "\t" + cttgl[tEmail]) }, 500);
 
     }
-    console.log(ctts);
+    //console.log(ctts);
     //createGroups(ctts);
 });
 
@@ -93,11 +100,48 @@ fs.readFile("./groups.txt", "utf-8", (err, data) => {
 })
 
 const WebSocket = require("ws");
-
+let adminStarted = [false, false];
 const wss = new WebSocket.Server({ server });
+
+function clearAnswers() {
+    updateSpreadSheet();
+    for (let cEmail in ctir) {
+        ctir[cEmail].answers = [];
+        for (let i = 0; i < contests.length; i++) {
+            ctir[cEmail].answers.push([]);
+        }
+    }
+    for (let cGroup in ctgs) {
+        ctgs[cGroup].answers = [];
+        for (let i = 0; i < contests.length; i++) {
+            ctgs[cGroup].answers.push([]);
+        }
+    }
+}
 
 wss.on('connection', (ws) => {
     ws.on('message', (data) => {
+        if (!isNaN(data)) {
+            let tData = parseInt(data);
+            switch (tData) {
+                case 0:
+                case 1:
+                    adminStarted[data] = true;
+                    break;
+                case 2:
+                case 3:
+                    adminStarted[data - 2] = false;
+                    break;
+                case 4:
+                    clearAnswers();
+                    break;
+                default:
+                    break;
+            }
+
+            console.log(adminStarted);
+            return;
+        }
         let parsedData = JSON.parse(data);
         let { id, msg } = parsedData;
         switch (id) {
@@ -168,7 +212,16 @@ function loginHandle(message, ws) {
     }
 }
 
-let contests = [[1, 23, 3, 4, 55], [2, 2, 3, 4, 5], 3, 4];
+
+let contests = [null, [1], null, null];
+fs.readFile("./contest.txt", "utf-8", (err, data) => {
+    let contestData = data.split("\n");
+    let ind = contestData.indexOf("_\r");
+    contests[0] = contestData.slice(0, ind);
+    contests[1] = contestData.slice(ind + 1);
+})
+
+
 let testNames = [{ name: "Combinatorics", time: Date.now(), num: 0 }, { name: "Algebra", time: Date.now(), num: 0 }]
 let testTimes = [1, 1, 30, 30];
 let isIndividual = [true, false];
@@ -186,7 +239,7 @@ function userRequestStartHandle(message, ws, ind = false) {
     //find group and initiate start if time is right and email is right
     let temp = ctts[email.toLowerCase()];
     console.log(temp);
-    if (temp != null && pin === temp.pin) {
+    if (temp != null && pin === temp.pin && adminStarted[testNum]) {
         if (isIndividual[testNum] || isIndividual[ctir[email.toLowerCase()].ctn]) {
             console.log("THIS WAS CALLEDind", ctir[email.toLowerCase()].acceptResponses);
 
@@ -198,7 +251,8 @@ function userRequestStartHandle(message, ws, ind = false) {
 
 
             if (!ctir[email.toLowerCase()].acceptResponses) {
-                if (testNum == null) {
+                console.log("THIS: " + ctir[email.toLowerCase()].answers[testNum][0]);
+                if (testNum == null || ctir[email.toLowerCase()].answers[testNum][0] != null) {
                     console.log("THIS WAS CALLED");
                     ws.send(JSON.stringify({ id: "userRequestStartResponse", msg: { verify: false } }));
                     return;
@@ -276,7 +330,7 @@ function userRequestStartHandle(message, ws, ind = false) {
 
         } else {
             if (!ctgs[cttgl[email.toLowerCase()]].acceptResponses) {
-                if (testNum == null) {
+                if (testNum == null || ctgs[cttgl[email.toLowerCase()]].answers[testNum][0] != null) {
                     ws.send(JSON.stringify({ id: "userRequestStartResponse", msg: { verify: false } }));
                     return;
                 }
@@ -442,4 +496,4 @@ function updateSpreadSheet() {
     // console.log(Object.keys(ctir));
 }
 
-setInterval(updateSpreadSheet, 60000);
+setInterval(updateSpreadSheet, 240000);
