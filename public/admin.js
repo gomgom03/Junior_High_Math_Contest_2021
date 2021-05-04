@@ -4,8 +4,8 @@ let ws;
 if (prompt("pw") === "avocado") { connect() }
 
 async function connect() {
-    const loc = "ws://localhost:3000/"
-    //const loc = "ws://jrhighmath2021.azurewebsites.net/contest";
+    //const loc = "ws://localhost:3000/"
+    const loc = "ws://jrhighmath2021.azurewebsites.net/contest";
     function init() {
         if (ws) {
             ws.onerror = ws.onopen = ws.onclose = null;
