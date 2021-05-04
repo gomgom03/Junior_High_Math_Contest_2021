@@ -222,8 +222,8 @@ fs.readFile("./contest.txt", "utf-8", (err, data) => {
 })
 
 
-let testNames = [{ name: "Combinatorics", time: Date.now(), num: 0 }, { name: "Algebra", time: Date.now(), num: 0 }]
-let testTimes = [1, 1, 30, 30];
+let testNames = [{ name: "Individual", time: Date.now(), num: 0 }, { name: "Teams", time: Date.now(), num: 0 }]
+let testTimes = [30, 30, 30, 30];
 let isIndividual = [true, false];
 let testTypes = ["individual", "team", "individual", "relay"]
 
