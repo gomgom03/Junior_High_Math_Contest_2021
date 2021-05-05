@@ -216,6 +216,8 @@ function loginHandle(message, ws) {
 let contests = [null, [1], null, null];
 fs.readFile("./contest.txt", "utf-8", (err, data) => {
     let contestData = data.split("\n");
+    console.log(contestData);
+    console.log(contestData.indexOf("_"));
     let ind = contestData.indexOf("_\r");
     console.log("============>" + ind);
     contests[0] = contestData.slice(0, ind);
