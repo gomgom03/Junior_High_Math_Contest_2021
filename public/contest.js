@@ -193,9 +193,9 @@ function generateTestOptions() {
     tHeading.classList = "block-heading";
     let tHeadingTitle = document.createElement("h2");
     tHeadingTitle.classList = "text-info";
-    tHeadingTitle.textContent = "Login";
+    tHeadingTitle.textContent = "Welcome, " + localStorage.getItem("fName");
     let tHeadingParagraph = document.createElement("p");
-    tHeadingParagraph.textContent = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quam urna, dignissim nec auctor in, mattis vitae leo."
+    tHeadingParagraph.textContent = "The following tests will open at their designated times."
     tHeading.appendChild(tHeadingTitle);
     tHeading.appendChild(tHeadingParagraph);
     tContainer.appendChild(tHeading);

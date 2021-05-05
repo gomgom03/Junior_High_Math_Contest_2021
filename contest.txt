@@ -1,6 +1,6 @@
 Find the smallest positive integer $k$ for which the expression $$\sqrt{20+\sqrt{19+\sqrt{18+k}}}$$ is an integer.
 Rank the following variables from least to greatest: $a = 2^{(3^5)}, b = 5^{(3^2)}, c = 3^{(2^5)}, d = 3^{(5^2)}$. For your answer, submit the letters with no spaces (i.e. $abcd$).
-Consider the following target where the radius of the smallest circle is 1, the radius of the second smallest circle is 2, and the radius of the outside circle is 3. What is the area of the shaded region?<img src="target.png" style="width:20%;height:auto;">
+Consider the following target where the radius of the smallest circle is 1, the radius of the second smallest circle is 2, and the radius of the outside circle is 3. What is the area of the shaded region?<br><img src="target.png" style="width:20%;height:auto;">
 We say a number is 'happy' if all of its digits are perfect squares. How many positive integers less than or equal $100,000$ are happy?
 John is playing a game.  He starts with the number $-1/2$, and he has four “operation tokens” to perform mathematical operations on his number.  For each token, he can either add 2, multiply by 2, or square his current number (for example, $+2, \times2, +2,\ ^\wedge 2$, would produce 25).  John wants to end with an integer-- what is the largest possible integer that John can end up with after using all four tokens?
 Fred takes 6 hours to clean a car. Charles takes 2 hours to clean a car. Amelia takes 1 hour to clean a car. Working together, how many <strong>minutes</strong> does it take Fred, Charles, and Amelia together to clean a car?
@@ -12,7 +12,7 @@ How many ways are there to place an ``X” and an ``O” on a 3x3 tic-tac-toe bo
 Joe has a square pool in his backyard. His parents want to build a walkway to surround the pool. They want this walkway to have rounded corners so that it is 5 feet wide at all points. They measured the pool and discovered its diagonal length to be 18 feet. The area of the walkway is in the form $a\sqrt2+b\pi$ square feet, for positive integers $a,b$. What is $a+b?$
 What is the area of the region enclosed by the graph of $\vert2x\vert + \vert y - 2021\vert = 4$?
 Find the minimum value of $4^{x+1}-2^{x-1}+1$ over all real numbers $x$.
-A square with side length 7 and and a circle with radius 4 have the same center. The exact value of the black area minus the gray area can be written in the form $a\pi+b$ for rational numbers $a$ and $b$. Find $a+b.$<img src="weirdimg.png" style="width:20%;height:auto;">
+A square with side length 7 and and a circle with radius 4 have the same center. The exact value of the black area minus the gray area can be written in the form $a\pi+b$ for rational numbers $a$ and $b$. Find $a+b.$<br><img src="weirdimg.png" style="width:20%;height:auto;">
 For each integer $N$ between 1 and $1,000,000$, inclusive, Tom writes down the largest factor of $N$ that is a perfect cube. Find the sum of all of the numbers he wrote down.
 _
 Consider the first 30,000 terms of the Fibonacci sequence: $1, 1, 2, 3, 5, 8, \ldots$ where each number is the sum of the previous two terms.  How many of these terms will be divisible by 3?

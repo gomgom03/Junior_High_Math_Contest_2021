@@ -217,6 +217,7 @@ let contests = [null, [1], null, null];
 fs.readFile("./contest.txt", "utf-8", (err, data) => {
     let contestData = data.split("\n");
     let ind = contestData.indexOf("_\r");
+    console.log("============>" + ind);
     contests[0] = contestData.slice(0, ind);
     contests[1] = contestData.slice(ind + 1);
 })
@@ -238,8 +239,8 @@ function userRequestStartHandle(message, ws, ind = false) {
     }
     //find group and initiate start if time is right and email is right
     let temp = ctts[email.toLowerCase()];
-    console.log(temp);
-    if (temp != null && pin === temp.pin && adminStarted[testNum]) {
+    //console.log(temp != nul, pin === temp.pin, adminStarted[testNum]);
+    if (temp != null && pin === temp.pin && (adminStarted[testNum] || ctir[email.toLowerCase()].acceptResponses || ctgs[cttgl[email.toLowerCase()]].acceptResponses)) {
         if (isIndividual[testNum] || isIndividual[ctir[email.toLowerCase()].ctn]) {
             console.log("THIS WAS CALLEDind", ctir[email.toLowerCase()].acceptResponses);
 
@@ -253,7 +254,7 @@ function userRequestStartHandle(message, ws, ind = false) {
             if (!ctir[email.toLowerCase()].acceptResponses) {
                 console.log("THIS: " + ctir[email.toLowerCase()].answers[testNum][0]);
                 if (testNum == null || ctir[email.toLowerCase()].answers[testNum][0] != null) {
-                    console.log("THIS WAS CALLED");
+                    console.log("1 Called");
                     ws.send(JSON.stringify({ id: "userRequestStartResponse", msg: { verify: false } }));
                     return;
                 }
@@ -331,6 +332,7 @@ function userRequestStartHandle(message, ws, ind = false) {
         } else {
             if (!ctgs[cttgl[email.toLowerCase()]].acceptResponses) {
                 if (testNum == null || ctgs[cttgl[email.toLowerCase()]].answers[testNum][0] != null) {
+                    console.log("2 Called");
                     ws.send(JSON.stringify({ id: "userRequestStartResponse", msg: { verify: false } }));
                     return;
                 }
@@ -388,6 +390,7 @@ function userRequestStartHandle(message, ws, ind = false) {
             }
         }
     } else {
+        console.log("3 called");
         ws.send(JSON.stringify({ id: "userRequestStartResponse", msg: { verify: false } }));
     }
 }
