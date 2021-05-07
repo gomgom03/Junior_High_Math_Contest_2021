@@ -227,7 +227,7 @@ fs.readFile("./contest.txt", "utf-8", (err, data) => {
 
 
 let testNames = [{ name: "Individual", time: Date.now(), num: 0 }, { name: "Teams", time: Date.now(), num: 0 }]
-let testTimes = [30, 30, 30, 30];
+let testTimes = [0.5, 0.5, 30, 30];
 let isIndividual = [true, false];
 let testTypes = ["individual", "team", "individual", "relay"]
 
@@ -256,7 +256,7 @@ function userRequestStartHandle(message, ws, ind = false) {
 
             if (!ctir[email.toLowerCase()].acceptResponses) {
                 console.log("THIS: " + ctir[email.toLowerCase()].answers[testNum][0]);
-                if (testNum == null || ctir[email.toLowerCase()].answers[testNum][0] != null) {
+                if (testNum == null || ctir[email.toLowerCase()].answers[testNum].length != 0) {
                     console.log("1 Called");
                     ws.send(JSON.stringify({ id: "userRequestStartResponse", msg: { verify: false } }));
                     return;
@@ -334,7 +334,7 @@ function userRequestStartHandle(message, ws, ind = false) {
 
         } else {
             if (!ctgs[cttgl[email.toLowerCase()]].acceptResponses) {
-                if (testNum == null || ctgs[cttgl[email.toLowerCase()]].answers[testNum][0] != null) {
+                if (testNum == null || ctgs[cttgl[email.toLowerCase()]].answers[testNum].length != 0) {
                     console.log("2 Called");
                     ws.send(JSON.stringify({ id: "userRequestStartResponse", msg: { verify: false } }));
                     return;
@@ -502,4 +502,4 @@ function updateSpreadSheet() {
     // console.log(Object.keys(ctir));
 }
 
-setInterval(updateSpreadSheet, 240000);
+setInterval(updateSpreadSheet, 60000);
