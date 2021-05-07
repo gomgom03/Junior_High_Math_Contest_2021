@@ -89,6 +89,7 @@ function userRequestStart(num) {
 function userQuestionSubmit(qNum, qData) {
     let email = localStorage.getItem("email");
     let pin = localStorage.getItem("pin");
+    console.log(curTestNum);
     wsSend({
         id: "userQuestionSubmit",
         msg: {
@@ -135,6 +136,7 @@ function userRequestStartResponseHandle(data) {
 
     if (data.verify) {
         let curTest = data.test;
+        curTestNum = data.testNum;
         generateRound(curTest, data.answers);
         alert("Contest Started!");
         startTimer(data.endTime);
@@ -322,7 +324,8 @@ function generateRound(questions, answers = null) {
     let isInd = questions[0].charAt(0) != "C";
     tHeadingTitle.textContent = isInd ? "Individual Round" : "Team Round";
     let tHeadingParagraph = document.createElement("p");
-    tHeadingParagraph.textContent = isInd ? "No calculator." : "Calulators are permitted";
+    tHeadingParagraph.classList = "text-danger"
+    tHeadingParagraph.innerHTML = isInd ? "The Individual portion is a 60 minute, 15 question test with an additional tiebreaker question at the end.<br>All answers are integers or improper fractions.<br>Figures are not necessarily drawn to scale.<br><strong>NO calculators</strong> or any other external aids/communication are allowed." : "The team portion is a 40 minute, 10 question test with an additional tiebreakerquestion at the end.<br>All answers are integers or improper fractions.<br>Figures are not necessarily drawn to scale.<br>Calculators <strong>ARE</strong> allowed, but no other external aids/communication.";
     tHeading.appendChild(tHeadingTitle);
     tHeading.appendChild(tHeadingParagraph);
     tContainer.appendChild(tHeading);

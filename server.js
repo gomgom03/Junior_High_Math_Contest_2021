@@ -96,7 +96,7 @@ fs.readFile("./groups.txt", "utf-8", (err, data) => {
             cttgl[x] = curGroup;
         })
     }
-    console.log(cttgl, ctgs)
+    //console.log(cttgl, ctgs)
 })
 
 const WebSocket = require("ws");
@@ -200,7 +200,7 @@ function loginHandle(message, ws) {
         ws.send(JSON.stringify({ id: "loginResponse", msg: { verify: false } }));
     }
     let temp = ctts[email.toLowerCase()];
-    console.log(temp);
+    //console.log(temp);
     if (temp != null && temp.pw === pw) {
         ctis[email.toLowerCase()] = ws;
         ctgs[cttgl[email.toLowerCase()]].wsList.push(ws);
@@ -220,14 +220,14 @@ fs.readFile("./contest.txt", "utf-8", (err, data) => {
     // console.log(contestData.indexOf("_"));
     //let ind = contestData.indexOf("_\r");
     let ind = contestData.indexOf("_");
-    console.log("============>" + ind);
+    console.log("Test index sliced at============>" + ind);
     contests[0] = contestData.slice(0, ind);
     contests[1] = contestData.slice(ind + 1);
 })
 
 
 let testNames = [{ name: "Individual", time: Date.now(), num: 0 }, { name: "Teams", time: Date.now(), num: 0 }]
-let testTimes = [0.5, 0.5, 30, 30];
+let testTimes = [10, 0.1, 30, 30];
 let isIndividual = [true, false];
 let testTypes = ["individual", "team", "individual", "relay"]
 
@@ -235,7 +235,7 @@ let testTypes = ["individual", "team", "individual", "relay"]
 
 function userRequestStartHandle(message, ws, ind = false) {
     let { pin, email, testNum } = message;
-    console.log(pin, email, testNum);
+    //console.log(pin, email, testNum);
     if (pin == null || email == null) {
         ws.send(JSON.stringify({ id: "userRequestStartResponse", msg: { verify: false } }));
         return;
@@ -244,8 +244,8 @@ function userRequestStartHandle(message, ws, ind = false) {
     let temp = ctts[email.toLowerCase()];
     //console.log(temp != nul, pin === temp.pin, adminStarted[testNum]);
     if (temp != null && pin === temp.pin && (adminStarted[testNum] || ctir[email.toLowerCase()].acceptResponses || ctgs[cttgl[email.toLowerCase()]].acceptResponses)) {
-        if (isIndividual[testNum] || isIndividual[ctir[email.toLowerCase()].ctn]) {
-            console.log("THIS WAS CALLEDind", ctir[email.toLowerCase()].acceptResponses);
+        if (isIndividual[testNum] || (isIndividual[ctir[email.toLowerCase()].ctn] && ctir[email.toLowerCase()].acceptResponses)) {
+            //console.log("THIS WAS CALLEDind", ctir[email.toLowerCase()].acceptResponses);
 
 
 
@@ -255,9 +255,9 @@ function userRequestStartHandle(message, ws, ind = false) {
 
 
             if (!ctir[email.toLowerCase()].acceptResponses) {
-                console.log("THIS: " + ctir[email.toLowerCase()].answers[testNum][0]);
+                //console.log("THIS: " + ctir[email.toLowerCase()].answers[testNum][0]);
                 if (testNum == null || ctir[email.toLowerCase()].answers[testNum].length != 0) {
-                    console.log("1 Called");
+                    //console.log("1 Called");
                     ws.send(JSON.stringify({ id: "userRequestStartResponse", msg: { verify: false } }));
                     return;
                 }
@@ -267,7 +267,7 @@ function userRequestStartHandle(message, ws, ind = false) {
                 let tEndTime = Date.now() + curTestTime * 60 * 1000;
                 ctir[email.toLowerCase()].endTime = tEndTime;
                 setTimeout(() => {
-                    console.log(ctir[email.toLowerCase()])
+                    //console.log(ctir[email.toLowerCase()])
                     ctir[email.toLowerCase()].wsList.forEach(x => {
                         if (x.readyState === WebSocket.OPEN) {
                             x.send(JSON.stringify({
@@ -284,6 +284,7 @@ function userRequestStartHandle(message, ws, ind = false) {
             }
             ////////START HERE
             let curTeam = ctir[email.toLowerCase()];
+            console.log(ind ? 100 : 0);
             if (ind) {
                 let curSocket = ctis[email.toLowerCase()];
                 if (curSocket.readyState === WebSocket.OPEN) {
@@ -291,6 +292,7 @@ function userRequestStartHandle(message, ws, ind = false) {
                         id: "userRequestStartResponse",
                         msg: {
                             verify: true,
+                            testNum: 0,
                             test: contests[ctir[email.toLowerCase()].ctn],
                             answers: curTeam.answers[ctir[email.toLowerCase()].ctn],
                             endTime: ctir[email.toLowerCase()].endTime
@@ -298,13 +300,14 @@ function userRequestStartHandle(message, ws, ind = false) {
                     }))
                 }
             } else {
-
+                console.log("called", ind);
                 curTeam.wsList.forEach(x => {
                     if (x.readyState === WebSocket.OPEN) {
                         x.send(JSON.stringify({
                             id: "userRequestStartResponse",
                             msg: {
                                 verify: true,
+                                testNum: 0,
                                 test: contests[ctir[email.toLowerCase()].ctn],
                                 endTime: ctir[email.toLowerCase()].endTime
                             }
@@ -335,7 +338,7 @@ function userRequestStartHandle(message, ws, ind = false) {
         } else {
             if (!ctgs[cttgl[email.toLowerCase()]].acceptResponses) {
                 if (testNum == null || ctgs[cttgl[email.toLowerCase()]].answers[testNum].length != 0) {
-                    console.log("2 Called");
+                    //console.log("2 Called");
                     ws.send(JSON.stringify({ id: "userRequestStartResponse", msg: { verify: false } }));
                     return;
                 }
@@ -345,7 +348,7 @@ function userRequestStartHandle(message, ws, ind = false) {
                 let tEndTime = Date.now() + curTestTime * 60 * 1000
                 ctgs[cttgl[email.toLowerCase()]].endTime = tEndTime;
                 setTimeout(() => {
-                    console.log(ctgs[cttgl[email.toLowerCase()]], ctir);
+                    //console.log(ctgs[cttgl[email.toLowerCase()]], ctir);
                     ctgs[cttgl[email.toLowerCase()]].wsList.forEach(x => {
                         if (x.readyState === WebSocket.OPEN) {
                             x.send(JSON.stringify({
@@ -368,6 +371,7 @@ function userRequestStartHandle(message, ws, ind = false) {
                         id: "userRequestStartResponse",
                         msg: {
                             verify: true,
+                            testNum: 1,
                             test: contests[ctgs[cttgl[email.toLowerCase()]].ctn],
                             answers: curTeam.answers[ctgs[cttgl[email.toLowerCase()]].ctn],
                             endTime: ctgs[cttgl[email.toLowerCase()]].endTime
@@ -375,13 +379,14 @@ function userRequestStartHandle(message, ws, ind = false) {
                     }))
                 }
             } else {
-
+                console.log(curTeam.wsList);
                 curTeam.wsList.forEach(x => {
                     if (x.readyState === WebSocket.OPEN) {
                         x.send(JSON.stringify({
                             id: "userRequestStartResponse",
                             msg: {
                                 verify: true,
+                                testNum: 1,
                                 test: contests[ctgs[cttgl[email.toLowerCase()]].ctn],
                                 endTime: ctgs[cttgl[email.toLowerCase()]].endTime
                             }
@@ -393,25 +398,25 @@ function userRequestStartHandle(message, ws, ind = false) {
             }
         }
     } else {
-        console.log("3 called");
+        //console.log("3 called");
         ws.send(JSON.stringify({ id: "userRequestStartResponse", msg: { verify: false } }));
     }
 }
 
 function userQuestionSubmitHandle(message, ws) {
     let { pin, email, testNum, qNum, qData } = message;
-    console.log(pin, email, testNum, qNum, qData);
+    //console.log(pin, email, testNum, qNum, qData);
     if (pin == null || email == null || testNum == null || qNum == null || qData == null) {
         ws.send(JSON.stringify({ id: "userQuestionSubmitResponse", msg: { verify: false } }));
         return;
     }
-    console.log(ctir);
+    //console.log(ctir);
     //find group and initiate start if time is right and email is right
     let temp = ctts[email.toLowerCase()];
-    console.log(temp, pin);
+    //console.log(temp, pin);
     if (temp != null && temp.pin === pin) {
 
-        if (isIndividual[ctir[email.toLowerCase()].ctn]) {
+        if (isIndividual[ctir[email.toLowerCase()].ctn] && ctir[email.toLowerCase()].acceptResponses) {
 
 
 
@@ -430,7 +435,7 @@ function userQuestionSubmitHandle(message, ws) {
                         }))
                     }
                 })
-                console.log(ctgs);
+                //console.log(ctgs);
                 return;
             } else {
                 ws.send(JSON.stringify({ id: "userQuestionSubmitResponse", msg: { verify: false } }));
@@ -456,7 +461,7 @@ function userQuestionSubmitHandle(message, ws) {
                         }))
                     }
                 })
-                console.log(ctgs);
+                //console.log(ctgs);
                 return;
             } else {
                 ws.send(JSON.stringify({ id: "userQuestionSubmitResponse", msg: { verify: false } }));
@@ -473,7 +478,7 @@ function userQuestionSubmitHandle(message, ws) {
 
 
 const sheetsObj = require("./sheetsConnect.js");
-console.log(sheetsObj);
+//console.log(sheetsObj);
 let writer = new sheetsObj();
 //console.log(writer);
 writer.run();
@@ -484,6 +489,7 @@ function updateSpreadSheet() {
     for (key in ctgs) {
         let arr = [key];
         let cur = ctgs[key];
+        console.log(cur.answers);
         arr = arr.concat(cur.answers[1]);
         wt.push(arr);
     }
