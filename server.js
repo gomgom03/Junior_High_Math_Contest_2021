@@ -117,6 +117,7 @@ function clearAnswers() {
             ctgs[cGroup].answers.push([]);
         }
     }
+    console.log("Answers Cleared.")
 }
 
 wss.on('connection', (ws) => {
@@ -142,6 +143,17 @@ wss.on('connection', (ws) => {
             console.log(adminStarted);
             return;
         }
+        if (data.charAt(0) == "#") {
+            let curEmailBoot = data.substring(1);
+            if (ctts[curEmailBoot] != null) {
+                ctis[curEmailBoot].send("logoff");
+                console.log("User " + curEmailBoot + " logged off");
+            } else {
+                console.log("User " + curEmailBoot + " FAILED logged off");
+            }
+            return;
+        }
+
         let parsedData = JSON.parse(data);
         let { id, msg } = parsedData;
         switch (id) {
@@ -207,8 +219,10 @@ function loginHandle(message, ws) {
         ctir[email.toLowerCase()].wsList.push(ws);
         ws.send(JSON.stringify({ id: "loginResponse", msg: Object.assign({ ...temp }, { verify: true, tests: JSON.stringify(testNames) }) }));
         ctgs[cttgl[email.toLowerCase()]].acceptResponses || ctir[email.toLowerCase()].acceptResponses ? userRequestStartHandle(temp, ws, true) : null;
+        console.log(email.toLowerCase() + " login SUCCESS.")
     } else {
         ws.send(JSON.stringify({ id: "loginResponse", msg: { verify: false } }));
+        console.log(email.toLowerCase() + " login FAILURE.")
     }
 }
 
@@ -226,7 +240,7 @@ fs.readFile("./contest.txt", "utf-8", (err, data) => {
 })
 
 
-let testNames = [{ name: "Individual", time: Date.now(), num: 0 }, { name: "Teams", time: Date.now(), num: 0 }]
+let testNames = [{ name: "Individual", time: 1620483300000, num: 0 }, { name: "Teams", time: 1620487800000, num: 0 }]
 let testTimes = [10, 0.1, 30, 30];
 let isIndividual = [true, false];
 let testTypes = ["individual", "team", "individual", "relay"]
@@ -261,6 +275,7 @@ function userRequestStartHandle(message, ws, ind = false) {
                     ws.send(JSON.stringify({ id: "userRequestStartResponse", msg: { verify: false } }));
                     return;
                 }
+                console.log(email.toLowerCase() + "contest started");
                 ctir[email.toLowerCase()].acceptResponses = true;
                 ctir[email.toLowerCase()].ctn = testNum
                 let curTestTime = testTimes[testNum];
@@ -284,7 +299,7 @@ function userRequestStartHandle(message, ws, ind = false) {
             }
             ////////START HERE
             let curTeam = ctir[email.toLowerCase()];
-            console.log(ind ? 100 : 0);
+            //console.log(ind ? 100 : 0);
             if (ind) {
                 let curSocket = ctis[email.toLowerCase()];
                 if (curSocket.readyState === WebSocket.OPEN) {
@@ -300,7 +315,7 @@ function userRequestStartHandle(message, ws, ind = false) {
                     }))
                 }
             } else {
-                console.log("called", ind);
+                //console.log("called", ind);
                 curTeam.wsList.forEach(x => {
                     if (x.readyState === WebSocket.OPEN) {
                         x.send(JSON.stringify({
@@ -342,6 +357,7 @@ function userRequestStartHandle(message, ws, ind = false) {
                     ws.send(JSON.stringify({ id: "userRequestStartResponse", msg: { verify: false } }));
                     return;
                 }
+                console.log(cttgl[email.toLowerCase()] + "contest started");
                 ctgs[cttgl[email.toLowerCase()]].acceptResponses = true;
                 ctgs[cttgl[email.toLowerCase()]].ctn = testNum
                 let curTestTime = testTimes[testNum];
@@ -379,7 +395,7 @@ function userRequestStartHandle(message, ws, ind = false) {
                     }))
                 }
             } else {
-                console.log(curTeam.wsList);
+                //console.log(curTeam.wsList);
                 curTeam.wsList.forEach(x => {
                     if (x.readyState === WebSocket.OPEN) {
                         x.send(JSON.stringify({
@@ -489,7 +505,6 @@ function updateSpreadSheet() {
     for (key in ctgs) {
         let arr = [key];
         let cur = ctgs[key];
-        console.log(cur.answers);
         arr = arr.concat(cur.answers[1]);
         wt.push(arr);
     }
@@ -503,9 +518,10 @@ function updateSpreadSheet() {
         wt.push(arr);
     }
     writer.writeData("Individual", "A1", wt);
+    console.log("Answers Updated");
     // console.log(wt);
     // console.log(Object.keys(ctgs));
     // console.log(Object.keys(ctir));
 }
 
-setInterval(updateSpreadSheet, 60000);
+setInterval(updateSpreadSheet, 120000);

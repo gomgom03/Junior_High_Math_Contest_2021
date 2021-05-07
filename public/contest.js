@@ -17,6 +17,11 @@ async function connect() {
             tEmail == null || tPw == null ? generateLogin() : loginSend(tEmail, tPw);
         }
         ws.onmessage = (data) => {
+            if (data.data == "logoff") {
+                localStorage.clear();
+                location.reload();
+                return;
+            }
             let parsedData = JSON.parse(data.data)
             let { id, msg } = parsedData;
             switch (id) {
@@ -89,7 +94,7 @@ function userRequestStart(num) {
 function userQuestionSubmit(qNum, qData) {
     let email = localStorage.getItem("email");
     let pin = localStorage.getItem("pin");
-    console.log(curTestNum);
+    //console.log(curTestNum);
     wsSend({
         id: "userQuestionSubmit",
         msg: {
@@ -140,7 +145,7 @@ function userRequestStartResponseHandle(data) {
         generateRound(curTest, data.answers);
         alert("Contest Started!");
         startTimer(data.endTime);
-        console.log(curTest);
+        //console.log(curTest);
     } else {
         alert("User Request Start Denied.")
     }
@@ -149,12 +154,12 @@ function userRequestStartResponseHandle(data) {
 function userQuestionSubmitResponseHandle(data) {
     let { verify, qData } = data;
     if (verify) {
-        console.log(qData);
+        //console.log(qData);
         for (let i = 0; i < qData.length; i++) {
             let curData = qData[i];
-            console.log(curData, curData == null)
+            //console.log(curData, curData == null)
             if (curData != null) {
-                console.log(curData);
+                //console.log(curData);
                 prevAnswerElems[i].textContent = curData;
             }
         }
@@ -195,7 +200,7 @@ function generateTestOptions() {
     tHeading.classList = "block-heading";
     let tHeadingTitle = document.createElement("h2");
     tHeadingTitle.classList = "text-info";
-    tHeadingTitle.textContent = "Welcome, " + localStorage.getItem("fName");
+    tHeadingTitle.textContent = "Welcome, " + localStorage.getItem("fName") + "!";
     let tHeadingParagraph = document.createElement("p");
     tHeadingParagraph.textContent = "The following tests will open at their designated times."
     tHeading.appendChild(tHeadingTitle);
@@ -205,9 +210,9 @@ function generateTestOptions() {
     let allTests = JSON.parse(localStorage.getItem("tests"));
     for (let i = 0; i < allTests.length; i++) {
         let temp = allTests[i];
-        console.log(temp.name);
+        //console.log(temp.name);
         let tRow = document.createElement("div");
-        tRow.classList = "row";
+        tRow.classList = "row mb-4";
         let testName = document.createElement("div");
         testName.classList = "col-4";
         testName.textContent = temp.name;
@@ -218,6 +223,7 @@ function generateTestOptions() {
         testStart.classList = "col-3";
         let testButton = document.createElement("button");
         testButton.textContent = "Start";
+        testButton.classList = "btn btn-primary"
         testStart.appendChild(testButton);
         tRow.appendChild(testName);
         tRow.appendChild(testTime);
@@ -304,7 +310,7 @@ function generateLogin() {
 }
 
 function generateRound(questions, answers = null) {
-    console.log(questions);
+    //console.log(questions);
     while (section_container.hasChildNodes()) {
         section_container.removeChild(section_container.firstChild);
     }

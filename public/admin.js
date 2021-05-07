@@ -34,3 +34,12 @@ function start(num) {
     alert(`Started ${num}`);
     ws.send(num);
 }
+
+const inputLogout = document.getElementById("target");
+
+function forceLogout() {
+    let val = inputLogout.value;
+    if (val != "") {
+        ws.send("#" + val);
+    }
+}
