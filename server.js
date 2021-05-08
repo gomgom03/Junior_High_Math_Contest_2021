@@ -122,6 +122,7 @@ function clearAnswers() {
 
 wss.on('connection', (ws) => {
     ws.on('message', (data) => {
+        console.log(data);
         if (!isNaN(data)) {
             let tData = parseInt(data);
             switch (tData) {
