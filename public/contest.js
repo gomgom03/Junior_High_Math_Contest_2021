@@ -276,8 +276,8 @@ function generateLogin() {
     emailDiv.classList = "form-group";
     let inputEmailDiv = document.createElement("input");
     inputEmailDiv.classList = "form-control";
-    inputEmailDiv.type = "email";
-    inputEmailDiv.name = "email";
+    inputEmailDiv.type = "username";
+    inputEmailDiv.name = "username";
     inputEmailDiv.placeholder = "Email";
     emailDiv.appendChild(inputEmailDiv);
     form.appendChild(emailDiv);
@@ -329,9 +329,9 @@ function generateRound(questions, answers = null) {
     tHeadingTitle.classList = "text-info";
     let isInd = questions[0].charAt(0) != "C";
     tHeadingTitle.textContent = isInd ? "Individual Round" : "Team Round";
-    let tHeadingParagraph = document.createElement("p");
+    let tHeadingParagraph = document.createElement("div");
     tHeadingParagraph.classList = "text-danger"
-    tHeadingParagraph.innerHTML = isInd ? "The Individual portion is a 60 minute, 15 question test with an additionaltiebreaker question at the end.<br>All answers are integers or common/improper fractions.<br>Figures are not necessarily drawn to scale.<br>NO calculators or any other external aids/communication are allowed.<br>You MUST press ”Submit” for each question, or we will not receive your answers." : "The team portion is a 45 minute, 10 question test with an additional tiebreaker question at the end.<br>All answers are integers or common/improper fractions.<br>Figures are not necessarily drawn to scale.<br>Calculators ARE allowed, and collaboration with team members is allowed(and encouraged!)<br>You MUST press ”Submit” for each question, or we will not receive your answers.";
+    tHeadingParagraph.innerHTML = isInd ? "The Individual portion is a 60 minute, 15 question test with an additional tiebreaker question at the end.<br>All answers are integers or common/improper fractions.<br>Figures are not necessarily drawn to scale.<br>NO calculators or any other external aids/communication are allowed.<br>You MUST press ”Submit” for each question, or we will not receive your answers." : "The team portion is a 45 minute, 10 question test with an additional tiebreaker question at the end.<br>All answers are integers or common/improper fractions.<br>Figures are not necessarily drawn to scale.<br>Calculators ARE allowed, and collaboration with team members is allowed (and encouraged!)<br>You MUST press ”Submit” for each question, or we will not receive your answers.";
     tHeading.appendChild(tHeadingTitle);
     tHeading.appendChild(tHeadingParagraph);
     tContainer.appendChild(tHeading);

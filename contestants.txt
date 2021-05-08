@@ -1,5 +1,4 @@
 understanding_aardvark	Pawel	Odziomek	x	Attea	Unknown	Unknown
-confident_ant	Humza	Chinwalla	x	Field 	GBN	Unknown
 reliable_armadillo	Stefan	Zlatkovic	x	Field Middle School	GBS	Unknown
 easy_barracuda	Kristelle	Widjaja	x	Maple School	GBN	Unknown
 amazed_bee	Alex	Lukas	x	Springman	GBS	Unknown
@@ -7,7 +6,7 @@ free_butterfly	Nathan	Stupnitsky 	x	Wood Oaks	GBN	Unknown
 sympathetic_cassowary	G1Student-1	:)	x	Unknown	Unknown	Unknown
 interested_chamois	G1Student-2	:)	x	Unknown	Unknown	Unknown
 satisfied_chinchilla	Chad	Park	x	Attea	GBS	Unknown
-receptive_cockroach	Anna	Bozarth	x	Field Middle School	GBN	Unknown
+receptive_giraffe	Anna	Bozarth	x	Field Middle School	GBN	Unknown
 accepting_crab	Mia	Margulis	x	Field School	GBN	Unknown
 kind_curlew	Kaylee	Hwang	x	Maple Shcool	GBN	Unknown
 concerned_dogfish	Joshua	Rosenthal	x	Springman Middle School	GBS	Unknown
@@ -31,7 +30,6 @@ bold_llama	G4Student-2	:)	x	Unknown	Unknown	Unknown
 brave_louse	Shuja	Raina	x	Attea Middle School	GBS	Unknown
 daring_manatee	James	Grayes	x	Field Middle School	GBS	Unknown
 optimistic_meerkat	Sebastian	Mark	x	Maple School	GBN	Unknown
-impulsive_monkey	Josh	Raub	x	NBJH	Unknown	Unknown
 free_mule	Ella	Kaled	x	The Science and Arts Academy 	Unknown	Unknown
 sure_octopus	G5Student-1	:)	x	Unknown	Unknown	Unknown
 certain_ostrich	G5Student-2	:)	x	Unknown	Unknown	Unknown
