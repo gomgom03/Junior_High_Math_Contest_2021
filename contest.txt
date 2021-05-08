@@ -25,4 +25,4 @@ A certain math competition is scored as follows: Before the competition, the coa
 Find the minimum value of $4^{x+1}-2^{x-1}+1$ over all real numbers $x$.
 A deck with 12 cards, numbered $1$, $2$, $3 \dots$  $12$, is shuffled.  Abby and Brandon each randomly draw and keep two of the cards, without any replacement.  What is the probability that Abby’s lowest card is higher than Brandon’s highest card?
 Let $GLEN$ be a rectangle, where side $GN = 20$ and diagonal $LN = 29$.  Let $S$ be on side $\overline{GL}$ such that $LS = 6$, and let $B$ be a point on segment $\overline{SN}$. If the area of $\triangle GBN$ is 60, what is the length of segment $\overline{SB}$?<br><img src="rectangleabc.png" style="width: 30%; height: auto;">
-<strong>[Tiebreaker]</strong> Submit a number between 0 and 1, inclusive. If your number is less than or equal to the mean of all (valid) answers submitted, you will receive that many points.
+<strong>[Tiebreaker] </strong> Submit a number between 0 and 1, inclusive. If your number is less than or equal to the mean of all (valid) answers submitted, you will receive that many points.
