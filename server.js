@@ -30,8 +30,12 @@ app.get('/contest', (req, res) => {
 app.get('/resources', (req, res) => {
     res.render("resources.ejs")
 });
-app.get('/admin', (req, res) => {
-    res.render("admin.ejs");
+// app.get('/admin', (req, res) => {
+//     res.render("admin.ejs");
+// })
+
+app.get('/results', (req, res) => {
+    res.render("results.ejs");
 })
 
 // app.get('/mj', (req, res) => {
@@ -493,7 +497,7 @@ function userQuestionSubmitHandle(message, ws) {
 
 
 
-
+/*
 const sheetsObj = require("./sheetsConnect.js");
 //console.log(sheetsObj);
 let writer = new sheetsObj();
@@ -526,3 +530,4 @@ function updateSpreadSheet() {
 }
 
 setInterval(updateSpreadSheet, 120000);
+*/
